@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NewTodoComponent } from './new-todo/new-todo.component'
 import { TodoItemComponent } from "./todo-item/todo-item.component";
 import { Todo } from "./todo";
@@ -13,33 +13,9 @@ import { Todo } from "./todo";
 	]
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
   todos: any[] = [];
   computedPagination: any[] = [];
-
-  constructor () {
-    if(localStorage.getItem('todos')) {
-      let todos = JSON.parse(localStorage.getItem('todos'));
-
-      todos.forEach(todo => {
-        this.todos.push(new Todo(todo));
-      });
-
-      if(!todos.length) {
-        this.todos.push(new Todo({
-          id: 1,
-          title: 'First todo',
-          description: 'This is my first todo',
-          author: 'John Doe',
-          created_at: '2016-07-01 12:00:00',
-          completed_at: null
-        }));
-        this.saveToLocalStorage();
-      }
-    }
-
-    this.calculatePaginationArray();
-  }
 
 	pagination = {
 		total: this.todos.length,
@@ -122,6 +98,30 @@ export class AppComponent {
 
 	private saveToLocalStorage() {
 	  localStorage.setItem('todos', JSON.stringify(this.todos));
+  }
+
+  ngOnInit () {
+    if(localStorage.getItem('todos')) {
+      let todos = JSON.parse(localStorage.getItem('todos'));
+
+      todos.forEach(todo => {
+        this.todos.push(new Todo(todo));
+      });
+
+      if(!todos.length) {
+        this.todos.push(new Todo({
+          id: 1,
+          title: 'First todo',
+          description: 'This is my first todo',
+          author: 'John Doe',
+          created_at: '2016-07-01 12:00:00',
+          completed_at: null
+        }));
+        this.saveToLocalStorage();
+      }
+    }
+
+    this.calculatePaginationArray();
   }
 
 }
