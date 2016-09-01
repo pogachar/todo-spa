@@ -1,0 +1,28 @@
+.ng-valid[required] {
+	border-left: 5px solid #42A948;
+}
+
+.ng-invalid.ng-dirty {
+	border-left: 5px solid #a94442;
+}
+
+.new-todo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border-radius: 50%;
+  padding: 8px 12px;
+  z-index: 10;
+}
+
+.new-todo:focus {
+  outline: none;
+}
+
+hr {
+  border-color: #ccc;
+}
+
+.form-group.submit {
+  margin-bottom: 0;
+}

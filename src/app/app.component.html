@@ -1,0 +1,17 @@
+<div class="row">
+	<app-new-todo (onCreated)="createTodo($event)" #timer></app-new-todo>
+
+	<div class="row">
+		<div class="col-xs-12">
+      <app-todo-item *ngFor="let todo of computedTodos" [todo]="todo" (onDeleted)="deleteTodo($event)" (onChanged)="editTodo($event)"></app-todo-item>
+
+			<nav>
+				<ul class="pagination">
+					<li *ngFor="let num of computedPagination" [class.active]="num === pagination.current_page">
+						<a href="#" (click)="changePage($event, num)">{{ num }}</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,40 @@
+<div class="row">
+  <button type="button" class="btn btn-success new-todo" (click)="active = !active">
+    <span class="glyphicon glyphicon-plus"></span>
+  </button>
+
+	<div class="col-xs-12">
+		<form (ngSubmit)="createTodo(newTodoForm)" *ngIf="active" #newTodoForm="ngForm">
+			<div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="title" class="control-label">Title:</label>
+            <input type="text" class="form-control" name="title" id="title" placeholder="Title" [(ngModel)]="todo.title" required>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="author" class="control-label">Author:</label>
+            <input type="text" class="form-control" name="author" id="author" placeholder="Author" [(ngModel)]="todo.author" required>
+          </div>
+        </div>
+
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="description" class="control-label">Description:</label>
+            <textarea name="description" id="description" rows="3" class="form-control" placeholder="Description" [(ngModel)]="todo.description" required></textarea>
+          </div>
+
+          <div class="form-group submit">
+            <button type="submit" class="btn btn-primary" [disabled]="!newTodoForm.form.valid">
+              <span class="glyphicon glyphicon-plus"></span> Add
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+    </form>
+	</div>
+</div>

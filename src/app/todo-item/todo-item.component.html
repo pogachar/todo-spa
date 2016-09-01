@@ -1,0 +1,45 @@
+<div class="media">
+	<h4 class="media-heading">
+    {{ edit && !todo.completed_at ? 'Edit:' : '' }} <strong>{{ todo.title }}</strong>
+
+    <small *ngIf="!edit || todo.completed_at"> - {{ todo.author }}</small>
+
+    <button type="button" class="btn btn-primary btn-sm pull-right" (click)="editTodo()">
+      <span class="glyphicon" [class.glyphicon-pencil]="!edit" [class.glyphicon-ok]="edit"></span>
+    </button>
+
+    <small class="completed" *ngIf="todo.completed_at">Completed at: {{ todo.completed_at | date:"dd.MM.yyyy HH:mm" }}</small>
+  </h4>
+
+	<div class="media-body">
+    <p *ngIf="!edit || todo.completed_at">{{ todo.description }}</p>
+
+    <div *ngIf="edit && !todo.completed_at">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label [attr.for]="'title_' + todo.id" class="control-label">Title:</label>
+            <input type="text" class="form-control" [attr.name]="'title_' + todo.id" [attr.id]="'title_' + todo.id" placeholder="Title" [(ngModel)]="todo.title" required>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label [attr.for]="'author' + todo.id" class="control-label">Author:</label>
+            <input type="text" class="form-control" [attr.name]="'author' + todo.id" [attr.id]="'author' + todo.id" placeholder="Author" [(ngModel)]="todo.author" required>
+          </div>
+        </div>
+
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label [attr.for]="'description' + todo.id" class="control-label">Description:</label>
+            <textarea [attr.name]="'description' + todo.id" [attr.id]="'description' + todo.id" rows="3" class="form-control" placeholder="Description" [(ngModel)]="todo.description" required></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-success btn-sm" *ngIf="edit" (click)="toggleComplete()">Mark {{ todo.completed_at ? 'in' : ''}}complete</button>
+		<button type="button" class="btn btn-danger btn-sm" *ngIf="edit" (click)="deleteTodo()">Delete</button>
+	</div>
+</div>
