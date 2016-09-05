@@ -17,23 +17,26 @@
     <div *ngIf="edit && !todo.completed_at">
       <div class="row">
         <div class="col-sm-6">
-          <div class="form-group">
+          <div class="form-group" [class.has-error]="hasError('title')">
             <label [attr.for]="'title_' + todo.id" class="control-label">Title:</label>
             <input type="text" class="form-control" [attr.name]="'title_' + todo.id" [attr.id]="'title_' + todo.id" placeholder="Title" [(ngModel)]="todo.title" required>
+            <span class="help-block" *ngIf="hasError('title')">{{ errors.title[0]}}.</span>
           </div>
         </div>
 
         <div class="col-sm-6">
-          <div class="form-group">
+          <div class="form-group" [class.has-error]="hasError('author')">
             <label [attr.for]="'author' + todo.id" class="control-label">Author:</label>
             <input type="text" class="form-control" [attr.name]="'author' + todo.id" [attr.id]="'author' + todo.id" placeholder="Author" [(ngModel)]="todo.author" required>
+            <span class="help-block" *ngIf="hasError('author')">{{ errors.author[0]}}.</span>
           </div>
         </div>
 
         <div class="col-xs-12">
-          <div class="form-group">
+          <div class="form-group" [class.has-error]="hasError('description')">
             <label [attr.for]="'description' + todo.id" class="control-label">Description:</label>
             <textarea [attr.name]="'description' + todo.id" [attr.id]="'description' + todo.id" rows="3" class="form-control" placeholder="Description" [(ngModel)]="todo.description" required></textarea>
+            <span class="help-block" *ngIf="hasError('description')">{{ errors.description[0]}}.</span>
           </div>
         </div>
       </div>

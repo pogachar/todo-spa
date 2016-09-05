@@ -2,15 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { NewTodoComponent } from './new-todo/new-todo.component'
 import { TodoItemComponent } from "./todo-item/todo-item.component";
 import { Todo } from "./todo";
+import { Response, HTTP_PROVIDERS } from '@angular/http';
+import { APIService } from "./api.service";
 
 @Component({
 	moduleId: module.id,
 	selector: 'app-root',
 	templateUrl: 'app.component.html',
 	styleUrls: ['app.component.css'],
-	directives: [
-		NewTodoComponent, TodoItemComponent
-	]
+	directives: [NewTodoComponent, TodoItemComponent],
+  providers: [HTTP_PROVIDERS, APIService]
 })
 
 export class AppComponent implements OnInit {
@@ -26,40 +27,27 @@ export class AppComponent implements OnInit {
 		to: 3
 	};
 
+  constructor(public api: APIService) {}
+
 	get computedTodos (): any[] {
 		return this.todos.slice(this.pagination.from - 1, this.pagination.to);
 	}
 
 	createTodo (todo: Todo) {
-	  // TODO remove fake data when API is implemented
-    todo.id = this.todos[this.todos.length - 1].id + 1;
-    todo.completed_at = null;
-    this.todos.unshift(todo);
-
-    this.calculatePaginationArray();
-    this.saveToLocalStorage();
+    this.getTodos(1);
 	}
 
 	deleteTodo (todo: Todo) {
-		this.todos.splice(this.todos.indexOf(todo), 1);
-
-    this.calculatePaginationArray();
-    this.saveToLocalStorage();
+    this.getTodos(this.todos.length ? this.pagination.current_page : 1);
 	}
-
-	editTodo (todo: Todo) {
-    this.saveToLocalStorage();
-  }
 
 	changePage (e, page) {
 		e.preventDefault();
 
-    this.calculatePagination(page);
+    this.getTodos(page);
 	}
 
   private calculatePaginationArray () {
-    this.calculatePagination();
-
     if(!this.pagination.to) {
       return [];
     }
@@ -85,43 +73,29 @@ export class AppComponent implements OnInit {
     this.computedPagination = arr;
   }
 
-	private calculatePagination (page = null) {
-    this.pagination.total = this.todos.length;
-    this.pagination.last_page = Math.ceil(this.todos.length / 3);
+	private getTodos (page = 1) {
+    this.api.getTodos({ page }).subscribe((response: Response) => {
+      let data = response.json();
+      this.todos = [];
 
-    if(page) {
-      this.pagination.current_page = page;
-      this.pagination.from = (page - 1) * this.pagination.per_page + 1;
-      this.pagination.to = page * this.pagination.per_page;
-    }
-  }
+      data.data.forEach(todo => {
+        if (todo.Task.completed_at === '0000-00-00 00:00:00') {
+          todo.Task.completed_at = null;
+        }
 
-	private saveToLocalStorage() {
-	  localStorage.setItem('todos', JSON.stringify(this.todos));
+        this.todos.push(new Todo(todo.Task));
+      });
+
+      this.pagination = data.pagination;
+
+      this.calculatePaginationArray();
+    }, (error: Response) => {
+      // console.log('error', error);
+    });
   }
 
   ngOnInit () {
-    if(localStorage.getItem('todos')) {
-      let todos = JSON.parse(localStorage.getItem('todos'));
-
-      todos.forEach(todo => {
-        this.todos.push(new Todo(todo));
-      });
-
-      if(!todos.length) {
-        this.todos.push(new Todo({
-          id: 1,
-          title: 'First todo',
-          description: 'This is my first todo',
-          author: 'John Doe',
-          created_at: '2016-07-01 12:00:00',
-          completed_at: null
-        }));
-        this.saveToLocalStorage();
-      }
-    }
-
-    this.calculatePaginationArray();
+    this.getTodos(1);
   }
 
 }

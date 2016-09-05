@@ -3,7 +3,7 @@
 
 	<div class="row">
 		<div class="col-xs-12">
-      <app-todo-item *ngFor="let todo of computedTodos" [todo]="todo" (onDeleted)="deleteTodo($event)" (onChanged)="editTodo($event)"></app-todo-item>
+      <app-todo-item *ngFor="let todo of computedTodos" [todo]="todo" (onDeleted)="deleteTodo($event)"></app-todo-item>
 
 			<nav>
 				<ul class="pagination">

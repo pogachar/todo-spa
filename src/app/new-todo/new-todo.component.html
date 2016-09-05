@@ -7,23 +7,26 @@
 		<form (ngSubmit)="createTodo(newTodoForm)" *ngIf="active" #newTodoForm="ngForm">
 			<div class="row">
         <div class="col-sm-6">
-          <div class="form-group">
+          <div class="form-group" [class.has-error]="hasError('title')">
             <label for="title" class="control-label">Title:</label>
             <input type="text" class="form-control" name="title" id="title" placeholder="Title" [(ngModel)]="todo.title" required>
+            <span class="help-block" *ngIf="hasError('title')">{{ errors.title[0]}}.</span>
           </div>
         </div>
 
         <div class="col-sm-6">
-          <div class="form-group">
+          <div class="form-group" [class.has-error]="hasError('author')">
             <label for="author" class="control-label">Author:</label>
             <input type="text" class="form-control" name="author" id="author" placeholder="Author" [(ngModel)]="todo.author" required>
+            <span class="help-block" *ngIf="hasError('author')">{{ errors.author[0]}}.</span>
           </div>
         </div>
 
         <div class="col-xs-12">
-          <div class="form-group">
+          <div class="form-group" [class.has-error]="hasError('description')">
             <label for="description" class="control-label">Description:</label>
             <textarea name="description" id="description" rows="3" class="form-control" placeholder="Description" [(ngModel)]="todo.description" required></textarea>
+            <span class="help-block" *ngIf="hasError('description')">{{ errors.description[0]}}.</span>
           </div>
 
           <div class="form-group submit">
